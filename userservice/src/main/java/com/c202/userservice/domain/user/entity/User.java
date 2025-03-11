@@ -2,14 +2,12 @@ package com.c202.userservice.domain.user.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long userSeq;
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;
@@ -31,8 +29,8 @@ public class User {
     @Column(nullable = false)
     private String birthDate;
 
-    @Column(nullable = true, length = 5)
-    private String birthTime;
+    @Column(nullable = true, length = 100)
+    private String introduction;
 
     @Column(nullable = false, length = 15)
     private String createdAt;
@@ -40,8 +38,11 @@ public class User {
     @Column(nullable = false, length = 15)
     private String updatedAt;
 
+    @Column(nullable = true, length = 15)
+    private String deletedAt;
+
     @Column(nullable = false, length = 1)
-    private String deleted;
+    private String isDeleted;
 
     // 엔티티 수정 메소드 추가
     public void updateNickname(String nickname) {
@@ -52,11 +53,16 @@ public class User {
         this.password = password;
     }
 
+    public void updateBirthDate(String birthDate) {this.birthDate = birthDate;}
+
     public void deleteUser() {
-        this.deleted = "Y";
+        this.isDeleted = "Y";
     }
 
     public void updateInfo(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public void updateIntroduction(String introduction) {this.introduction = introduction;}
+
 }

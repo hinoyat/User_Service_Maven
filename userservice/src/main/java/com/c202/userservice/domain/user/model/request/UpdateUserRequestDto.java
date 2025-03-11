@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class UpdateUserRequestDto {
 
-    private String password;
     private String nickname;
+    private String password;
+    private String birthDate;
+    // 아이콘
 }

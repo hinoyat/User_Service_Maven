@@ -16,7 +16,7 @@ public class UserResponseDto {
     // Dto 변환
     public static UserResponseDto toDto(User user) {
         return UserResponseDto.builder()
-                .id(user.getId())
+                .id(user.getUserSeq())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .birthDate(user.getBirthDate())

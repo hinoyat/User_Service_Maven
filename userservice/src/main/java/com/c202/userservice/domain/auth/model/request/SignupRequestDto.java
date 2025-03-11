@@ -1,4 +1,4 @@
-package com.c202.userservice.domain.user.model.request;
+package com.c202.userservice.domain.auth.model.request;
 
 import lombok.Builder;
 import lombok.Data;

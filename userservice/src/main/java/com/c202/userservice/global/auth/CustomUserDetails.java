@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
-        this.id = user.getId();
+        this.id = user.getUserSeq();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.nickName = user.getNickname();

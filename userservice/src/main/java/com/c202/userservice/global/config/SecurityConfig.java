@@ -33,7 +33,7 @@ public class SecurityConfig {
 //                .csrf(csrf -> csrf
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                        // CSRF 보호에서 일부 경로 제외 (API만 해당)
-//                        .ignoringRequestMatchers("/api/users/login", "/api/users/signup", "/api/users/refresh"))
+//                        .ignoringRequestMatchers("/api/users/login", "/api/users/register", "/api/users/refresh"))
                 .csrf(csrf -> csrf.disable())
                 // 쿠키 설정
                 .sessionManagement(session -> session
@@ -50,10 +50,13 @@ public class SecurityConfig {
                 // 엔드포인트 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
                         // 공개 엔드포인트 설정
-                        .requestMatchers("/api/users/signup", "/api/users/login", "/api/users/check/**", "/api/users/refresh").permitAll()
-                        // 로그아웃 엔드포인트 명시적 허용 (인증된 사용자만)
-                        .requestMatchers("/api/users/logout").authenticated()
-                        // 인증된 사용자만 접근 가능한 엔드포인트
+                        .requestMatchers(
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/check/**",
+                                "/api/auth/refresh"
+                        ).permitAll()
+                        // 인증된 사용자만 접근 가능
                         .anyRequest().authenticated())
                 // JWT 필터 추가 (UsernamePasswordAuthenticationFilter 전에 실행)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
