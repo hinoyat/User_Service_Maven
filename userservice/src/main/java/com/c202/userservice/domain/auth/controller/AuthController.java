@@ -1,6 +1,6 @@
 package com.c202.userservice.domain.auth.controller;
 
-import com.c202.userservice.domain.auth.service.AuthService;
+import com.c202.userservice.domain.auth.service.AuthServiceImpl;
 import com.c202.userservice.domain.auth.model.request.LoginRequestDto;
 import com.c202.userservice.domain.auth.model.request.SignupRequestDto;
 import com.c202.userservice.domain.user.model.response.UserResponseDto;
@@ -23,12 +23,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponseDto>> register(@RequestBody SignupRequestDto requestDto) {
-        UserResponseDto user = authService.register(requestDto);
+        UserResponseDto user = authServiceImpl.register(requestDto);
         return ResponseEntity.ok(ApiResponse.success(user, "회원가입 성공"));
     }
 
@@ -38,7 +38,7 @@ public class AuthController {
             @RequestBody LoginRequestDto requestDto,
             HttpServletResponse response) {
 
-        TokenDto.TokenResponseDto tokens = authService.login(requestDto);
+        TokenDto.TokenResponseDto tokens = authServiceImpl.login(requestDto);
 
         // 리프레시 토큰을 쿠키에 설정
         jwtTokenProvider.addRefreshTokenToCookie(response, tokens.getRefreshToken());
@@ -59,7 +59,7 @@ public class AuthController {
             HttpServletResponse response) {
 
         // 로그아웃 처리 - 서비스에서 토큰 추출하지 않고 userId만 사용
-        authService.logout(userDetails.getId());
+        authServiceImpl.logout(userDetails.getId());
 
         // 리프레시 토큰 쿠키 삭제
         jwtTokenProvider.deleteRefreshTokenCookie(response);
@@ -69,7 +69,7 @@ public class AuthController {
 
     @GetMapping("/check-username/{username}")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkUsernameAvailability(@PathVariable String username) {
-        boolean isAvailable = authService.isUsernameAvailable(username);
+        boolean isAvailable = authServiceImpl.isUsernameAvailable(username);
         return ResponseEntity.ok(ApiResponse.success(
                 Map.of("available", isAvailable),
                 isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다."
@@ -78,7 +78,7 @@ public class AuthController {
 
     @GetMapping("/check-nickname/{nickname}")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkNicknameAvailability(@PathVariable String nickname) {
-        boolean isAvailable = authService.isNicknameAvailable(nickname);
+        boolean isAvailable = authServiceImpl.isNicknameAvailable(nickname);
         return ResponseEntity.ok(ApiResponse.success(
                 Map.of("available", isAvailable),
                 isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다."
